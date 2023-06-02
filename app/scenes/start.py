@@ -1,5 +1,5 @@
 from pygame import Surface
-from pygame.font import Font
+from pygame.font import Font, get_default_font
 from pygame.locals import *
 from game.game import Game
 from scene.scene import Scene
@@ -15,7 +15,7 @@ class StartScene(Scene):
         self.background = Surface((self.config.WIDTH, self.config.HEIGHT))
         self.background.fill((120, 0, 0))
         self.screen.blit(self.background, (0, 0))
-        self.font = Font('/usr/share/fonts/TTF/FiraCodeNerdFontPropo-Regular.ttf', 80)
+        self.font = Font(get_default_font(), 80)
         message = self.font.render("Press start", 'True', (255, 255, 255))
         message_center = message.get_rect(center=(self.config.WIDTH / 2, self.config.HEIGHT / 2))
         self.screen.blit(message, message_center)

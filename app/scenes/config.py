@@ -1,4 +1,5 @@
 from pygame import Surface
+from pygame.font import Font, get_default_font
 from game.game import Game
 from scene.scene import Scene
 
