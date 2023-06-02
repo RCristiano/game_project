@@ -4,7 +4,7 @@ from pygame.locals import *
 from game.game import Game
 from scene.scene import Scene
 from scenes.config import ConfigScene
-import pygame
+
 
 class StartScene(Scene):
     
