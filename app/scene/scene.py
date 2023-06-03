@@ -1,18 +1,23 @@
+from pygame import Rect
+
 class Scene:
-    def __init__(self, name, game):
+    def __init__(self, name: str, game, rect: Rect = None):
         self.name = name
         self.game = game
+        self.rect = rect
+        self.clickable = False
+        self.click = False
         self.entities = []
-        self.systems = []
         self.logger = game.logger
         self.logger.info(f"Scene {self.name} created")
 
     def add_entity(self, entity):
         self.entities.append(entity)
 
-    def add_system(self, system):
-        self.systems.append(system)
-
-    def update(self, delta_time):
-        for system in self.systems:
-            system.update(delta_time)
+    def update(self):
+        if self.clickable and self.rect and (pos := self.game.click(self)):
+            if self.rect.collidepoint(pos):
+                self.click = True
+                self.logger.info(f"Scene {self.name} clicked")
+        for entity in self.entities:
+            entity.update()

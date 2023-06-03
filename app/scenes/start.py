@@ -12,15 +12,19 @@ class StartScene(Scene):
         super().__init__("Start Screen", game)
         self.screen = game.screen
         self.config = game.config
-        self.background = Surface((self.config.WIDTH, self.config.HEIGHT))
+        self.background = Surface(self.screen.get_size())
+        self.font = Font(get_default_font(), 80)
+        
+    def update(self):
+        super().update()
         self.background.fill((120, 0, 0))
         self.screen.blit(self.background, (0, 0))
-        self.font = Font(get_default_font(), 80)
-        message = self.font.render("Press start", 'True', (255, 255, 255))
-        message_center = message.get_rect(center=(self.config.WIDTH / 2, self.config.HEIGHT / 2))
-        self.screen.blit(message, message_center)
-        
-    def update(self, delta_time):
-        if self.game.events():
-            self.logger.info("Start pressed")
-            self.game.scene = ConfigScene(self.game)
+        self.message = self.font.render("Press start", 'True', (255, 255, 255))
+        self.message_center = self.message.get_rect(
+            center=(self.config.WIDTH / 2, self.config.HEIGHT / 2)
+        )
+        self.screen.blit(self.message, self.message_center)
+        for event in self.game.events():
+            if event.type == KEYDOWN:
+                self.logger.info("Start pressed")
+                self.game.scene = ConfigScene(self.game)
