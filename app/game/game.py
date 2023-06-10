@@ -30,12 +30,12 @@ class Game:
         self.screen: Surface = pygame.display.set_mode((self.config.WIDTH, self.config.HEIGHT))
         self.running: bool = False
         self.scene: Scene | Any = None
-        self.logger: logging.Logger = GameLogger()
+        self.logger: logging.Logger = GameLogger('Game')
 
-    def run(self, scene: Scene) -> None:
+    def run(self, start_scene: Scene) -> None:
         """ Game Loop"""
         self.running = True
-        self.scene = scene(self)
+        self.scene = start_scene(self)
         self.logger.info(f"Game started")
         while self.running:
             try:
