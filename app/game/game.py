@@ -3,11 +3,13 @@ import pygame
 from typing import Any
 from pygame import Surface
 from pygame.time import Clock
+
 from protocols.scene import Scene
 from config.config import Config
 
 
 class GameLogger(logging.Logger):
+    """ Game Logger """
 
     def __init__(self, name: str = "Game"):
         super().__init__(name)
@@ -29,27 +31,30 @@ class Game:
         self.clock: Clock = pygame.time.Clock()
         self.screen: Surface = pygame.display.set_mode((self.config.WIDTH, self.config.HEIGHT))
         self.running: bool = False
-        self.scene: Scene | Any = None
-        self.logger: logging.Logger = GameLogger('Game')
+        self.scene: Scene = None
+        self.script: callable = None
+        self.logger: type[logging.Logger] = GameLogger
 
     def run(self, start_scene: Scene) -> None:
         """ Game Loop"""
         self.running = True
-        self.scene = start_scene(self)
-        self.logger.info(f"Game started")
+        self.scene = start_scene
+        self.logger().info(f"Game started")
         while self.running:
+            self.script(self)
             try:
-                icon = pygame.image.load(self.config.ICON)
-                pygame.display.set_icon(icon)
+                # icon = pygame.image.load(self.config.ICON)
+                # pygame.display.set_icon(icon)
                 pygame.display.set_caption(self.config.TITLE)
             except AttributeError as e:
-                # self.logger.error(e)
-                pass
+                self.logger().error(e)
+                # self.quit()
             self.clock.tick(self.config.FPS)
             self.scene.update() 
             pygame.display.flip()
             
     def quit(self) -> None:
+        self.logger().info(f"Game stopped")
         self.running = False
         pygame.quit()
         quit()

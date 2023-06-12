@@ -1,7 +1,5 @@
 from logging import Logger
-from typing import Callable, Protocol
-from pygame import Rect
-from pygame.event import Event
+from typing import Callable, Protocol, Self
 
 from protocols.game import Game
 from protocols.entity import Entity
@@ -10,13 +8,22 @@ from protocols.entity import Entity
 class Scene(Protocol):
     name: str
     game: Game
-    rect: Rect
-    clickable: bool
-    click: bool
-    entities: list[Entity]
-    systems: dict[Callable, tuple]
-    actions: list[tuple[Event, Callable]]
-    logger: Logger
+    entities: list[Self]
+    systems: dict[Callable, tuple] 
+    actions: list[Callable] 
+    logger: type[Logger]
 
-    def update(self):
-        """Update the scene"""
+    def __init__(self, name: str, game: Game) -> None:
+        ...
+
+    def add_entity(self, entity: Entity) -> None:
+        ...
+
+    def add_system(self, system: Callable, *args, **kwargs) -> None:
+        ...
+
+    def add_action(self, action: Callable) -> None:
+        ...
+
+    def update(self) -> None:
+        ...
