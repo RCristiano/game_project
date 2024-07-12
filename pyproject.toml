@@ -3,11 +3,10 @@ name = "game-project"
 version = "0.1.0"
 description = ""
 authors = ["Rodrigo Cristiano <rcristianofv@hotmail.com>"]
-readme = "README.md"
-packages = [{include = "game_project"}]
+packages = [{include = "engine"}]
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.10"
 pygame = "^2.4.0"
 
 

@@ -8,7 +8,7 @@
             "name": "Python: Game",
             "type": "python",
             "request": "launch",
-            "program": "app/app.py",
+            "program": "game/main.py",
             "console": "integratedTerminal",
             "justMyCode": true
         }
