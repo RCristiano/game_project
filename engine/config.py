@@ -10,7 +10,7 @@ class Config:
     def __init__(self, config_file: os.PathLike | str = "config.ini"):
         self.config = ConfigParser()
         if not self.config.read(config_file):
-            logger.error(f"Config file not found: {config_file}")
+            logger.error("Config file not found: %s", config_file)
 
             self.config["game"] = {
                 "TITLE": "Game",
@@ -21,7 +21,7 @@ class Config:
                 "HEIGHT": "600",
                 "FPS": "30",
             }
-            with open(config_file, "w") as file:
+            with open(config_file, "w", encoding="UTF-8") as file:
                 self.config.write(file)
 
         self.TITLE = self.config["game"]["TITLE"]

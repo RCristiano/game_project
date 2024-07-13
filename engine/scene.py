@@ -6,6 +6,8 @@ from engine.logger import logger
 
 
 class Scene:
+    """Scene class for the engine"""
+
     def __init__(self, name: str | None = None) -> None:
         self.name: str | None = name
         self.entities: set[Scene] = set()
@@ -17,21 +19,53 @@ class Scene:
         logger.info("Scene %s created", self.name)
 
     def draw(self, name: str | None = None):
+        """
+        Decorator function to add a drawing to the scene.
+
+        Args:
+            name (str | None, optional): The name of the drawing.
+                If not provided, the name of the decorated function will be
+                used. Defaults to None.
+
+        Returns:
+            Callable[..., None]: The decorated drawing function.
+        """
+
         def decorator(drawing: Callable[..., None]):
             self.drawings[(_name := name or drawing.__name__)] = drawing
-            logger.info(f"Draw {_name} added to scene {self.name}")
+            logger.info("Draw %s added to scene %s", _name, self.name)
             return drawing
 
         return decorator
 
     def erase(self, name: str) -> None:
+        """
+        Removes a drawing from the scene.
+
+        Args:
+            name (str): The name of the drawing to be removed.
+
+        Returns:
+            None
+        """
         if name in self.drawings:
             self.drawings.pop(name)
 
     def event_listener(self, event_listener: Callable[..., None]):
+        """
+        Adds an event listener to the scene.
+
+        Parameters:
+            event_listener (Callable[..., None]): The event listener function to be added.
+
+        Returns:
+            None
+
+        """
         self.event_listeners.add(event_listener)
         logger.info(
-            "Event listnet %s added to scene %s", event_listener.__name__, self.name
+            "Event listener %s added to scene %s",
+            event_listener.__name__, self.name
         )
 
     def call_event(self, event: Event | None = None) -> None:
@@ -40,15 +74,15 @@ class Scene:
 
     def add_entity(self, entity: Any) -> None:
         self.entities.add(entity)
-        logger.info(f"Entity {entity.name} added to scene {self.name}")
+        logger.info("Entity %s added to scene %s", entity.name, self.name)
 
     def add_system(self, system: Callable, *args, **kwargs) -> None:
         self.systems[system] = {"args": args, "kwargs": kwargs, "result": None}
-        logger.info(f"System {system.__name__} added to scene {self.name}")
+        logger.info("System %s added to scene %s", system.__name__, self.name)
 
     def loop(self, loop: Callable[..., None]):
         self.to_loop.add(loop)
-        logger.info(f"Loop {loop.__name__} added to scene {self.name}")
+        logger.info("Loop %s added to scene %s", loop.__name__, self.name)
 
     def update(self) -> None:
         for entity in self.entities:

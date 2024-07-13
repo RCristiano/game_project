@@ -138,5 +138,17 @@ class Game:
         """
         logger.info("Game stopped")
         self.running = False
+        pygame.display.quit()
         pygame.quit()
         sys.exit()
+
+    def show_fps(self) -> None:
+        """
+        Show the current frames per second on the screen.
+
+        Returns:
+            None
+        """
+        font = pygame.font.Font(None, 36)
+        fps = font.render(str(int(self.clock.get_fps())), True, (255, 255, 255))
+        self.screen.blit(fps, (10, 10))
