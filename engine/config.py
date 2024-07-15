@@ -1,3 +1,13 @@
+"""
+Module Description
+
+This module contains the Config class which represents the configuration settings for the game.
+
+Author: Your Name
+Date: Current Date
+
+"""
+
 from configparser import ConfigParser
 import os
 
@@ -5,7 +15,23 @@ from engine.logger import logger
 
 
 class Config:
-    """Game Config"""
+    """Game Config
+
+    This class represents the configuration settings for the game.
+
+    Attributes:
+        config (ConfigParser): The configuration parser object.
+        title (str): The title of the game.
+        icon (str): The path to the game's icon.
+        width (int): The width of the game window.
+        height (int): The height of the game window.
+        fps (float): The frames per second of the game.
+        log_level (str): The log level for logging.
+
+    Methods:
+        __init__: Initializes the Config object and loads the configuration from a file.
+
+    """
 
     def __init__(self, config_file: os.PathLike | str = "config.ini"):
         self.config = ConfigParser()
@@ -24,8 +50,9 @@ class Config:
             with open(config_file, "w", encoding="UTF-8") as file:
                 self.config.write(file)
 
-        self.TITLE = self.config["game"]["TITLE"]
-        self.ICON = self.config["game"]["ICON"]
-        self.WIDTH = int(self.config["settings"]["WIDTH"])
-        self.HEIGHT = int(self.config["settings"]["HEIGHT"])
-        self.FPS = float(self.config["settings"]["FPS"])
+        self.title = self.config.get("game", "TITLE", fallback="Game")
+        self.icon = self.config.get("game", "ICON", fallback="")
+        self.width = self.config.getint("settings", "WIDTH", fallback=800)
+        self.height = self.config.getint("settings", "HEIGHT", fallback=600)
+        self.fps = self.config.getfloat("settings", "FPS", fallback=30)
+        self.log_level = self.config.get("debug", "LOG_LEVEL", fallback="NOTSET")
