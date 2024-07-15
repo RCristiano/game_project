@@ -26,6 +26,7 @@ class Config:
         width (int): The width of the game window.
         height (int): The height of the game window.
         fps (float): The frames per second of the game.
+        show_fps (bool): Flag indicating whether to show the frames per second on the game window.
         log_level (str): The log level for logging.
 
     Methods:
@@ -55,4 +56,5 @@ class Config:
         self.width = self.config.getint("settings", "WIDTH", fallback=800)
         self.height = self.config.getint("settings", "HEIGHT", fallback=600)
         self.fps = self.config.getfloat("settings", "FPS", fallback=30)
+        self.show_fps = self.config.getboolean("debug", "SHOW_FPS", fallback=False)
         self.log_level = self.config.get("debug", "LOG_LEVEL", fallback="NOTSET")
