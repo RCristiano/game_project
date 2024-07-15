@@ -24,7 +24,7 @@ def message(scene) -> None:
     font = Font(get_default_font(), 80)
     message = font.render("Next", True, (255, 255, 255))
     message_center = message.get_rect(
-        center=(scene.game.config.WIDTH / 2, scene.game.config.HEIGHT / 2)
+        center=(scene.game.config.width / 2, scene.game.config.height / 2)
     )
     scene.game.screen.blit(message, message_center)
 

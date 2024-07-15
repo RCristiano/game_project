@@ -72,17 +72,18 @@ class Game:
         self.init: tuple = pygame.init()
         self.clock: Clock = pygame.time.Clock()
         self.screen: Surface = pygame.display.set_mode(
-            (self.config.WIDTH, self.config.HEIGHT)
+            (self.config.width, self.config.height)
         )
         self.running: bool = False
+        logger.setLevel(self.config.log_level)
 
-        pygame.display.set_caption(self.config.TITLE)
-        if self.config.ICON:
+        pygame.display.set_caption(self.config.title)
+        if self.config.icon:
             try:
-                icon = pygame.image.load(self.config.ICON)
+                icon = pygame.image.load(self.config.icon)
                 pygame.display.set_icon(icon)
             except FileNotFoundError:
-                logger.error("Icon not found: %s", self.config.ICON)
+                logger.error("Icon not found: %s", self.config.icon)
 
     @property
     def scene(self) -> Scene:
@@ -125,7 +126,7 @@ class Game:
                     self.quit()
                 self.scene.call_event(event)
             self.scene.update()
-            self.clock.tick(self.config.FPS)
+            self.clock.tick(self.config.fps)
             pygame.display.flip()
             logger.debug("FPS: %s", self.clock.get_fps())
 
