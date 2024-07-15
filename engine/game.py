@@ -70,14 +70,13 @@ class Game:
         """
         self.config: Config = config or Config()
         self.init: tuple = pygame.init()
+        pygame.display.set_caption(self.config.title)
         self.clock: Clock = pygame.time.Clock()
         self.screen: Surface = pygame.display.set_mode(
             (self.config.width, self.config.height)
         )
         self.running: bool = False
         logger.setLevel(self.config.log_level)
-
-        pygame.display.set_caption(self.config.title)
         if self.config.icon:
             try:
                 icon = pygame.image.load(self.config.icon)
@@ -127,6 +126,8 @@ class Game:
                 self.scene.call_event(event)
             self.scene.update()
             self.clock.tick(self.config.fps)
+            if self.config.show_fps:
+                self.show_fps()
             pygame.display.flip()
             logger.debug("FPS: %s", self.clock.get_fps())
 
@@ -151,5 +152,11 @@ class Game:
             None
         """
         font = pygame.font.Font(None, 36)
-        fps = font.render(str(int(self.clock.get_fps())), True, (255, 255, 255))
-        self.screen.blit(fps, (10, 10))
+        fps = font.render(
+            str(int(self.clock.get_fps())),
+            True,
+            (255, 255, 255),
+            (125, 125, 125),
+        )
+        fps.set_alpha(128)
+        self.screen.blit(fps, (12, 12))
