@@ -1,7 +1,8 @@
 """
 This module provides a logger configuration for the game engine.
 
-The logger is configured to output log messages to the console with a specific format.
+The logger is configured to output log messages to the console with a specific
+format.
 The log level is set to DEBUG, which means all log messages will be displayed.
 
 Usage:
@@ -15,12 +16,33 @@ Usage:
 """
 
 import logging
+import logging.config
+from typing import Any
 
 
+LOGGING_CONFIG: dict[str, Any] = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "default": {
+            "fmt": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+        },
+    },
+    "handlers": {
+        "default": {
+            "formatter": "default",
+            "class": "logging.StreamHandler",
+            "stream": "ext://sys.stderr",
+        },
+    },
+    "loggers": {
+        "Game": {
+            "handlers": ["default"],
+            "level": "NOTSET",
+            "propagate": False,
+        },
+    },
+}
+
+logging.config.dictConfig(LOGGING_CONFIG)
 logger = logging.getLogger("Game")
-logger.setLevel(logging.NOTSET)
-formatter = logging.Formatter("%(asctime)s - %(name)s - %(levelname)s - %(message)s")
-handler = logging.StreamHandler()
-handler.setLevel(logging.DEBUG)
-handler.setFormatter(formatter)
-logger.addHandler(handler)
