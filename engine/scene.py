@@ -1,4 +1,4 @@
-""" Scene class for the engine """
+"""Scene class for the engine"""
 
 from typing import Any, Callable
 from pygame.event import Event
@@ -11,7 +11,7 @@ class Scene:
     def __init__(self, name: str | None = None) -> None:
         self.name: str | None = name
         self.entities: set[Scene] = set()
-        self.systems: dict[Callable, tuple[Any, ...]] = {}
+        self.systems: dict[Callable[..., Any], tuple[Any, ...]] = {}
         self.event_listeners: set[Callable[..., None]] = set()
         self.drawings: dict[str, Callable[..., None]] = {}
         self.to_loop: set[Callable[..., None]] = set()
@@ -65,26 +65,73 @@ class Scene:
         self.event_listeners.add(event_listener)
         logger.info(
             "Event listener %s added to scene %s",
-            event_listener.__name__, self.name
+            event_listener.__name__,
+            self.name,
         )
 
     def call_event(self, event: Event | None = None) -> None:
+        """
+        Notify all registered event listeners by calling them with the current
+        scene and the provided event.
+
+        Args:
+            event (Event | None): The event to pass to the listeners. Can be None.
+
+        Returns:
+            None
+        """
         for event_listener in self.event_listeners:
             event_listener(scene=self, event=event)
 
     def add_entity(self, entity: Any) -> None:
+        """
+        Add an entity to the scene and log the action.
+
+        Args:
+            entity (Any): The entity to add to the scene.
+
+        Returns:
+            None
+        """
         self.entities.add(entity)
         logger.info("Entity %s added to scene %s", entity.name, self.name)
 
     def add_system(self, system: Callable, *args, **kwargs) -> None:
+        """
+        Add a system to the scene with optional arguments and log the action.
+
+        Args:
+            system (Callable): The system function to add.
+            *args: Positional arguments for the system.
+            **kwargs: Keyword arguments for the system.
+
+        Returns:
+            None
+        """
         self.systems[system] = {"args": args, "kwargs": kwargs, "result": None}
         logger.info("System %s added to scene %s", system.__name__, self.name)
 
     def loop(self, loop: Callable[..., None]):
+        """
+        Add a loop function to the scene and log the action.
+
+        Args:
+            loop (Callable[..., None]): The loop function to add.
+
+        Returns:
+            None
+        """
         self.to_loop.add(loop)
         logger.info("Loop %s added to scene %s", loop.__name__, self.name)
 
     def update(self) -> None:
+        """
+        Update all entities, run all systems, and execute all drawing functions
+        in the scene.
+
+        Returns:
+            None
+        """
         for entity in self.entities:
             entity.update()
         for system in self.systems:
