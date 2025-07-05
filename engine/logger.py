@@ -25,7 +25,7 @@ LOGGING_CONFIG: dict[str, Any] = {
     "disable_existing_loggers": False,
     "formatters": {
         "default": {
-            "fmt": "%(asctime)s - %(name)s - %(levelname)s - %(message)s"
+            "format": "%(asctime)s [%(levelname)s] %(name)s: %(message)s"
         },
     },
     "handlers": {
@@ -38,11 +38,12 @@ LOGGING_CONFIG: dict[str, Any] = {
     "loggers": {
         "Game": {
             "handlers": ["default"],
-            "level": "NOTSET",
+            "level": "DEBUG",
             "propagate": False,
         },
     },
 }
 
 logging.config.dictConfig(LOGGING_CONFIG)
+
 logger = logging.getLogger("Game")
