@@ -69,7 +69,7 @@ class Game:
             None
         """
         self.config: Config = config or Config()
-        self.init: tuple = pygame.init()
+        self.init: tuple[int, int] = pygame.init()
         pygame.display.set_caption(self.config.title)
         self.clock: Clock = pygame.time.Clock()
         self.screen: Surface = pygame.display.set_mode(
